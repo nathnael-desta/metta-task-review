@@ -9,7 +9,7 @@
 )
 
  ;! (identity_law True) ; [(True True)]
- ;! (identity_law False) ;[(False False)]
+ ;! (identity_law False) ;[(True True)]
 
  ; Idempotent Law:-	P + P = P	P.P = P
 (= (idempotent_law $P)
@@ -17,4 +17,4 @@
 )
 
 ! (idempotent_law True) ; [(True True)]
-! (idempotent_law False) ;[(False False)]
+! (idempotent_law False) ;[(True True)]
