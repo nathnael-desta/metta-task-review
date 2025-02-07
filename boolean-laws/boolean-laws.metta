@@ -39,5 +39,13 @@
     ( (== (or $P (and $Q $R)) (and (or $P $Q) (or $P $R))) (== (and $P (or $Q $R)) (or (and $P $Q) (and $P $R))))
 )
 
-! (distributive_law True False True) ; [(True True)]
-! (distributive_law False True False) ; [(True True)]
+ ;! (distributive_law True False True) ; [(True True)]
+ ;! (distributive_law False True False) ; [(True True)]
+
+ ; Inversion Law	(A’)’ = A	(A’)’ = A
+(= (inversion_law $A)
+    ( (== (not (not $A)) $A) (== (not (not $A)) $A))
+)
+
+! (inversion_law True) ; [(True True)]
+! (inversion_law False) ;[(True True)]
