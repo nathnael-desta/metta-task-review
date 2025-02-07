@@ -47,5 +47,15 @@
     ( (== (not (not $A)) $A) (== (not (not $A)) $A))
 )
 
-! (inversion_law True) ; [(True True)]
-! (inversion_law False) ;[(True True)]
+ ;! (inversion_law True) ; [(True True)]
+ ;! (inversion_law False) ;[(True True)]
+
+ ; De Morgan’s Law	(P + Q)’ = (P)’.(Q)’	(P.Q)’ = (P)’ + (Q)’
+(= (de_morgans_law $P $Q)
+    ( (== (not (or $P $Q)) (and (not $P) (not $Q))) (== (not (and $P $Q)) (or (not $P) (not $Q))))
+)
+
+! (de_morgans_law True False ) ; [(True True)]
+! (de_morgans_law False True ) ; [(True True)]
+! (de_morgans_law True True ) ; [(True True)]
+! (de_morgans_law False False ) ; [(True True)]
