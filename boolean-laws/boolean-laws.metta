@@ -1,5 +1,4 @@
  ; assuming 0 represents false and 1 represents true
- ; assuming "+" is "or" and "*" is "and"
  ; the zero's index shows the OR form and the first shows AND form
  ; The return being True shows that the Laws apply regardless of the input value.
 
@@ -24,5 +23,13 @@
     ( (== (or $P $Q) (or $Q $P)) (== (and $P $Q ) (and $Q $P)))
 )
 
-! (commutative_law True False) ; [(True True)]
-! (commutative_law False True) ; [(True True)]
+ ;! (commutative_law True False) ; [(True True)]
+ ;! (commutative_law False True) ; [(True True)]
+
+ ; Associative Law	P + (Q + R) = (P + Q) + R	P.(Q.R) = (P.Q).R
+(= (associative_law $P $Q $R)
+    ( (== (or $P (or $Q $R)) (or (or $P $Q) $R)) (== (and $P (and $Q $R)) (and (and $P $Q) $R)))
+)
+
+! (associative_law True False True) ; [(True True)]
+! (associative_law False True False) ; [(True True)]
