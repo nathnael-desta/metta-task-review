@@ -16,5 +16,13 @@
     ( (== (or $P $P) $P) (== (and $P $P) $P))
 )
 
-! (idempotent_law True) ; [(True True)]
-! (idempotent_law False) ;[(True True)]
+ ;! (idempotent_law True) ; [(True True)]
+ ;! (idempotent_law False) ;[(True True)]
+
+ ; Commutative Law	P + Q = Q + P	P.Q = Q.P
+(= (commutative_law $P $Q)
+    ( (== (or $P $Q) (or $Q $P)) (== (and $P $Q ) (and $Q $P)))
+)
+
+! (commutative_law True False) ; [(True True)]
+! (commutative_law False True) ; [(True True)]
