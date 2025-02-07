@@ -31,5 +31,13 @@
     ( (== (or $P (or $Q $R)) (or (or $P $Q) $R)) (== (and $P (and $Q $R)) (and (and $P $Q) $R)))
 )
 
-! (associative_law True False True) ; [(True True)]
-! (associative_law False True False) ; [(True True)]
+ ;! (associative_law True False True) ; [(True True)]
+ ;! (associative_law False True False) ; [(True True)]
+
+ ; Distributive Law	P + QR = (P + Q).(P + R)	P.(Q + R) = P.Q + P.R
+(= (distributive_law $P $Q $R)
+    ( (== (or $P (and $Q $R)) (and (or $P $Q) (or $P $R))) (== (and $P (or $Q $R)) (or (and $P $Q) (and $P $R))))
+)
+
+! (distributive_law True False True) ; [(True True)]
+! (distributive_law False True False) ; [(True True)]
