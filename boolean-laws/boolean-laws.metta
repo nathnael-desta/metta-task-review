@@ -12,6 +12,10 @@
     (or $x $y)
 )
 
+(= (NOT $x)
+    (not $x)
+)
+
  ; Laws for Boolean Algebra
  ;       Law	         OR form	                      AND form
  ; Identity Law	       P + 0 = P 	                    P.1 = P
@@ -23,7 +27,7 @@
  ; De Morgan’s Law	   (P + Q)’ = (P)’.(Q)’	            (P.Q)’ = (P)’ + (Q)’
 
  ; I had to use :: for it to not excecute the input and output expression.
- ; I haven't found another way to input or output expressions without it executing them other than adding a random symbol(::)
+ ; I haven't found another way to make the input or output expressions not execute, other than adding a random symbol(::) infront
 
  ; Identity Law OR form:- P + 0 = P
 (= (identity_law (:: OR $x False))
@@ -87,5 +91,12 @@
     (:: OR (:: AND $x $y) (:: AND $x $z))
 )
 
-! (distributive_law (:: OR P (:: AND Q R))) ; [(:: AND (:: OR P Q) (:: OR P R))]
-! (distributive_law (:: AND P (:: OR Q R))) ; [(:: OR (:: AND P Q) (:: AND P R))]
+; ! (distributive_law (:: OR P (:: AND Q R))) ; [(:: AND (:: OR P Q) (:: OR P R))]
+; ! (distributive_law (:: AND P (:: OR Q R))) ; [(:: OR (:: AND P Q) (:: AND P R))]
+
+ ; Inversion Law :- (A’)’ = A
+(= (inversion_law (:: NOT (:: NOT $x)))
+    (:: $x)
+)
+
+! (inversion_law (:: NOT (:: NOT P))) ; [(:: P)]
