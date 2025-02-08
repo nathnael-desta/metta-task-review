@@ -12,6 +12,16 @@
     (or $x $y)
 )
 
+ ; Laws for Boolean Algebra
+ ;       Law	         OR form	                      AND form
+ ; Identity Law	       P + 0 = P 	                    P.1 = P
+ ; Idempotent Law	   P + P = P	                    P.P = P
+ ; Commutative Law	   P + Q = Q + P	                P.Q = Q.P
+ ; Associative Law	   P + (Q + R) = (P + Q) + R	    P.(Q.R) = (P.Q).R
+ ; Distributive Law	   P + QR = (P + Q).(P + R)	        P.(Q + R) = P.Q + P.R
+ ; Inversion Law	   (A’)’ = A	                    (A’)’ = A
+ ; De Morgan’s Law	   (P + Q)’ = (P)’.(Q)’	            (P.Q)’ = (P)’ + (Q)’
+
  ; I had to use :: for it to not excecute the input and output expression.
  ; I haven't found another way to input or output expressions without it executing them other than adding a random symbol(::)
 
@@ -38,5 +48,18 @@
     (:: $x)
 )
 
-! (idempotent_law (:: OR P P)) ; [(:: P)]
-! (idempotent_law (:: AND P P)) ; [(:: P)]
+ ;! (idempotent_law (:: OR P P)) ; [(:: P)]
+ ;! (idempotent_law (:: AND P P)) ; [(:: P)]
+
+ ; Commutative Law :- P + Q = Q + P
+(= (commutative_law (:: OR $x $y))
+    (:: OR $y $x)
+)
+
+ ; Commutative Law :- P.Q = Q.P
+(= (commutative_law (:: AND $x $y))
+    (:: AND $y $x)
+)
+
+! (commutative_law (:: OR P Q)) ; [(:: OR Q P)]
+! (commutative_law (:: AND P Q)) ; [(:: AND Q P)]
