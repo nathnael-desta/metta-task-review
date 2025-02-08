@@ -74,5 +74,18 @@
     (:: AND (:: AND $x $y) $z)
 )
 
-! (associative_law (:: OR P (:: OR Q R))) ; [(:: OR (:: OR P Q) R)]
-! (associative_law (:: AND P (:: AND Q R))) ; [(:: AND (:: AND P Q) R)]
+;! (associative_law (:: OR P (:: OR Q R))) ; [(:: OR (:: OR P Q) R)]
+;! (associative_law (:: AND P (:: AND Q R))) ; [(:: AND (:: AND P Q) R)]
+
+ ; Distributive Law OR form	:- P + QR = (P + Q).(P + R)
+(= (distributive_law (:: OR $x (:: AND $y $z)))
+    (:: AND (:: OR $x $y) (:: OR $x $z))
+)
+
+ ; Distributive Law AND form :- P.(Q + R) = P.Q + P.R
+(= (distributive_law (:: AND $x (:: OR $y $z)))
+    (:: OR (:: AND $x $y) (:: AND $x $z))
+)
+
+! (distributive_law (:: OR P (:: AND Q R))) ; [(:: AND (:: OR P Q) (:: OR P R))]
+! (distributive_law (:: AND P (:: OR Q R))) ; [(:: OR (:: AND P Q) (:: AND P R))]
