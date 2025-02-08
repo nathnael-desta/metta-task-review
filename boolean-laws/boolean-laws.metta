@@ -99,4 +99,18 @@
     (:: $x)
 )
 
-! (inversion_law (:: NOT (:: NOT P))) ; [(:: P)]
+; ! (inversion_law (:: NOT (:: NOT P))) ; [(:: P)]
+
+
+ ; De Morgan’s Law Or form :- (P + Q)’ = (P)’.(Q)’
+(= (de_morgans_law (:: NOT (:: OR $x $y)))
+    (:: AND (:: NOT $x) (:: NOT $y))
+)
+
+ ; De Morgan’s Law And form :(P.Q)’ = (P)’ + (Q)’
+(= (de_morgans_law (:: NOT (:: AND $x $y)))
+    (:: OR (:: NOT $x) (:: NOT $y))
+)
+
+! (de_morgans_law (:: NOT (:: OR P Q))) ; [(:: AND (:: NOT P) (:: NOT Q))]
+! (de_morgans_law (:: NOT (:: AND P Q))) ; [(:: OR (:: NOT P) (:: NOT Q))]
