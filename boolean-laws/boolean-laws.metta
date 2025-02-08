@@ -61,5 +61,18 @@
     (:: AND $y $x)
 )
 
-! (commutative_law (:: OR P Q)) ; [(:: OR Q P)]
-! (commutative_law (:: AND P Q)) ; [(:: AND Q P)]
+; ! (commutative_law (:: OR P Q)) ; [(:: OR Q P)]
+; ! (commutative_law (:: AND P Q)) ; [(:: AND Q P)]
+
+ ; Associative Law :- P + (Q + R) = (P + Q) + R
+(= (associative_law (:: OR $x (:: OR $y $z)))
+    (:: OR (:: OR $x $y) $z)
+)
+
+ ; Associative Law :- P.(Q.R) = (P.Q).R
+(= (associative_law (:: AND $x (:: AND $y $z)))
+    (:: AND (:: AND $x $y) $z)
+)
+
+! (associative_law (:: OR P (:: OR Q R))) ; [(:: OR (:: OR P Q) R)]
+! (associative_law (:: AND P (:: AND Q R))) ; [(:: AND (:: AND P Q) R)]
