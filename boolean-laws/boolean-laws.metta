@@ -25,5 +25,18 @@
     (:: $x)
 )
 
-! (identity_law (:: OR P False)) ; [(:: P)]
-! (identity_law (:: AND P True)) ; [(:: P)]
+ ;! (identity_law (:: OR P False)) ; [(:: P)]
+ ;! (identity_law (:: AND P True)) ; [(:: P)]
+
+ ; Idempotent Law:- P + P = P
+(= (idempotent_law (:: OR $x $x))
+    (:: $x)
+)
+
+ ; Idempotent Law:- P.P = P
+(= (idempotent_law (:: AND $x $x))
+    (:: $x)
+)
+
+! (idempotent_law (:: OR P P)) ; [(:: P)]
+! (idempotent_law (:: AND P P)) ; [(:: P)]
