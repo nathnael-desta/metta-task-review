@@ -1,61 +1,116 @@
- ; assuming 0 represents false and 1 represents true
- ; the zero's index shows the OR form and the first shows AND form
- ; The return being True shows that the Laws apply regardless of the input value.
+ ; variable expressions
+(= (P) True)
+(= (Q) False)
+(= (R) True)
 
- ; Identity Law:- 	P + 0 = P 	P.1 = P
-(= (identity_law $P)
-    ( (== (or $P False) $P) (== (and $P True) $P))
+ ; expressions for "and" and "or"
+(= (AND $x $y)
+    (and $x $y)
 )
 
- ;! (identity_law True) ; [(True True)]
- ;! (identity_law False) ;[(True True)]
-
- ; Idempotent Law:-	P + P = P	P.P = P
-(= (idempotent_law $P)
-    ( (== (or $P $P) $P) (== (and $P $P) $P))
+(= (OR $x $y)
+    (or $x $y)
 )
 
- ;! (idempotent_law True) ; [(True True)]
- ;! (idempotent_law False) ;[(True True)]
-
- ; Commutative Law	P + Q = Q + P	P.Q = Q.P
-(= (commutative_law $P $Q)
-    ( (== (or $P $Q) (or $Q $P)) (== (and $P $Q ) (and $Q $P)))
+(= (NOT $x)
+    (not $x)
 )
 
- ;! (commutative_law True False) ; [(True True)]
- ;! (commutative_law False True) ; [(True True)]
+ ; Laws for Boolean Algebra
+ ;       Law	         OR form	                      AND form
+ ; Identity Law	       P + 0 = P 	                    P.1 = P
+ ; Idempotent Law	   P + P = P	                    P.P = P
+ ; Commutative Law	   P + Q = Q + P	                P.Q = Q.P
+ ; Associative Law	   P + (Q + R) = (P + Q) + R	    P.(Q.R) = (P.Q).R
+ ; Distributive Law	   P + QR = (P + Q).(P + R)	        P.(Q + R) = P.Q + P.R
+ ; Inversion Law	   (A’)’ = A	                    (A’)’ = A
+ ; De Morgan’s Law	   (P + Q)’ = (P)’.(Q)’	            (P.Q)’ = (P)’ + (Q)’
 
- ; Associative Law	P + (Q + R) = (P + Q) + R	P.(Q.R) = (P.Q).R
-(= (associative_law $P $Q $R)
-    ( (== (or $P (or $Q $R)) (or (or $P $Q) $R)) (== (and $P (and $Q $R)) (and (and $P $Q) $R)))
+ ; I had to use :: for it to not excecute the input and output expression.
+ ; I haven't found another way to make the input or output expressions not execute, other than adding a random symbol(::) infront
+
+ ; Identity Law OR form:- P + 0 = P
+(= (identity_law (:: OR $x False))
+    (:: $x)
 )
 
- ;! (associative_law True False True) ; [(True True)]
- ;! (associative_law False True False) ; [(True True)]
-
- ; Distributive Law	P + QR = (P + Q).(P + R)	P.(Q + R) = P.Q + P.R
-(= (distributive_law $P $Q $R)
-    ( (== (or $P (and $Q $R)) (and (or $P $Q) (or $P $R))) (== (and $P (or $Q $R)) (or (and $P $Q) (and $P $R))))
+ ; Identity Law AND form:- P.1 = P
+(= (identity_law (:: AND $x True))
+    (:: $x)
 )
 
- ;! (distributive_law True False True) ; [(True True)]
- ;! (distributive_law False True False) ; [(True True)]
+ ;! (identity_law (:: OR P False)) ; [(:: P)]
+ ;! (identity_law (:: AND P True)) ; [(:: P)]
 
- ; Inversion Law	(A’)’ = A	(A’)’ = A
-(= (inversion_law $A)
-    ( (== (not (not $A)) $A) (== (not (not $A)) $A))
+ ; Idempotent Law OR form:- P + P = P
+(= (idempotent_law (:: OR $x $x))
+    (:: $x)
 )
 
- ;! (inversion_law True) ; [(True True)]
- ;! (inversion_law False) ;[(True True)]
-
- ; De Morgan’s Law	(P + Q)’ = (P)’.(Q)’	(P.Q)’ = (P)’ + (Q)’
-(= (de_morgans_law $P $Q)
-    ( (== (not (or $P $Q)) (and (not $P) (not $Q))) (== (not (and $P $Q)) (or (not $P) (not $Q))))
+ ; Idempotent Law AND form:- P.P = P
+(= (idempotent_law (:: AND $x $x))
+    (:: $x)
 )
 
-! (de_morgans_law True False ) ; [(True True)]
-! (de_morgans_law False True ) ; [(True True)]
-! (de_morgans_law True True ) ; [(True True)]
-! (de_morgans_law False False ) ; [(True True)]
+ ;! (idempotent_law (:: OR P P)) ; [(:: P)]
+ ;! (idempotent_law (:: AND P P)) ; [(:: P)]
+
+ ; Commutative Law OR form:- P + Q = Q + P
+(= (commutative_law (:: OR $x $y))
+    (:: OR $y $x)
+)
+
+ ; Commutative Law AND form :- P.Q = Q.P
+(= (commutative_law (:: AND $x $y))
+    (:: AND $y $x)
+)
+
+; ! (commutative_law (:: OR P Q)) ; [(:: OR Q P)]
+; ! (commutative_law (:: AND P Q)) ; [(:: AND Q P)]
+
+ ; Associative Law OR form :- P + (Q + R) = (P + Q) + R
+(= (associative_law (:: OR $x (:: OR $y $z)))
+    (:: OR (:: OR $x $y) $z)
+)
+
+ ; Associative Law AND form :- P.(Q.R) = (P.Q).R
+(= (associative_law (:: AND $x (:: AND $y $z)))
+    (:: AND (:: AND $x $y) $z)
+)
+
+;! (associative_law (:: OR P (:: OR Q R))) ; [(:: OR (:: OR P Q) R)]
+;! (associative_law (:: AND P (:: AND Q R))) ; [(:: AND (:: AND P Q) R)]
+
+ ; Distributive Law OR form	:- P + QR = (P + Q).(P + R)
+(= (distributive_law (:: OR $x (:: AND $y $z)))
+    (:: AND (:: OR $x $y) (:: OR $x $z))
+)
+
+ ; Distributive Law AND form :- P.(Q + R) = P.Q + P.R
+(= (distributive_law (:: AND $x (:: OR $y $z)))
+    (:: OR (:: AND $x $y) (:: AND $x $z))
+)
+
+; ! (distributive_law (:: OR P (:: AND Q R))) ; [(:: AND (:: OR P Q) (:: OR P R))]
+; ! (distributive_law (:: AND P (:: OR Q R))) ; [(:: OR (:: AND P Q) (:: AND P R))]
+
+ ; Inversion Law :- (A’)’ = A
+(= (inversion_law (:: NOT (:: NOT $x)))
+    (:: $x)
+)
+
+; ! (inversion_law (:: NOT (:: NOT P))) ; [(:: P)]
+
+
+ ; De Morgan’s Law Or form :- (P + Q)’ = (P)’.(Q)’
+(= (de_morgans_law (:: NOT (:: OR $x $y)))
+    (:: AND (:: NOT $x) (:: NOT $y))
+)
+
+ ; De Morgan’s Law And form :(P.Q)’ = (P)’ + (Q)’
+(= (de_morgans_law (:: NOT (:: AND $x $y)))
+    (:: OR (:: NOT $x) (:: NOT $y))
+)
+
+! (de_morgans_law (:: NOT (:: OR P Q))) ; [(:: AND (:: NOT P) (:: NOT Q))]
+! (de_morgans_law (:: NOT (:: AND P Q))) ; [(:: OR (:: NOT P) (:: NOT Q))]
