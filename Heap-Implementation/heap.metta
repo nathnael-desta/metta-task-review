@@ -9,5 +9,13 @@
 (=(return-list $list-name)(
     match &self (list $list-name $y) $y
 ))
- !(return-list x)
+; !(return-list x)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(= (length $list)
+    (if (== $list ())
+        0
+        (+ 1 (length (cdr-atom $list)))
+    )
+)
 
