@@ -226,3 +226,26 @@
 
 ; ! (floor-division-by-two 6)  ; 3
 ; ! (floor-division-by-two 7)  ; 3
+
+(= (heapify-items $list-name $index)
+    (if (< $index 0)
+        ()
+        (let () (min-heap $list-name $index)
+            (heapify-items $list-name (- $index 1))
+        )
+    )
+)
+
+(= (heapify $list-name)
+    (let*
+        (
+            ($list (return-list $list-name))
+            ($list-length (length $list))
+        )
+        (heapify-items $list-name (- (floor-division-by-two $list-length) 1))
+    )
+)
+
+! (return-list x)
+!(heapify x)
+! (return-list x)
