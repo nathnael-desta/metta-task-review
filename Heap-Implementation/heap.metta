@@ -190,7 +190,7 @@
         )
         (
             if (== $smaller $index)
-                $list
+                ()
                 (let*
                     (
                         ($new-list (swap $list $index $smaller))
@@ -203,5 +203,26 @@
     )
 )
 
-! (return-list x)
-!(min-heap x 0) ; (12 19 7 25 6 33 2 15 27 3 41) -> [(7 19 2 25 6 33 12 15 27 3 41)]
+;! (return-list x)
+;!(min-heap x 0) ; (12 19 7 25 6 33 2 15 27 3 41) -> [(7 19 2 25 6 33 12 15 27 3 41)]
+;! (return-list x)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; implementation of floor division by 2
+(= (floor-division-by-two $x)
+    (let*
+        (
+            ($divisible-number
+                (if (== (% $x 2) 0)
+                    $x
+                    (- $x 1)
+                )
+            )
+            ($answer (/ $divisible-number 2))
+        )
+        $answer
+    )
+)
+
+; ! (floor-division-by-two 6)  ; 3
+; ! (floor-division-by-two 7)  ; 3
