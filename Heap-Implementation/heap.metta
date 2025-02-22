@@ -118,4 +118,90 @@
     )
 )
 
-! (swap (0 1 2 3 4 5 6) 2 5) ; [(0 1 5 3 4 2 6)]
+;! (swap (0 1 2 3 4 5 6) 2 5) ; [(0 1 5 3 4 2 6)]
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; given a list and two indexes, returns the index of the smaller
+; index value or () if neither of the indexes are in the list
+(= (get-smaller-child $list $left $right)
+    (let*
+        (
+            ($list-length (length $list))
+            ($left-item
+                (if (>= $left $list-length)
+                    ()
+                    (getByIndex $list $left)
+                )
+            )
+            ($right-item
+                (if (>= $right $list-length)
+                    ()
+                    (getByIndex $list $right)
+                )
+            )
+            ($smaller-child
+                (if (== (get-type $left-item) Number)
+                    (if (== (get-type $right-item) Number)
+                        (if (> $left-item $right-item)
+                            $right
+                            $left
+                        )
+                        $left
+                    )
+                    (if (== (get-type $right-item) Number)
+                        $right
+                        ()
+                    )
+                )
+            )
+        )
+        $smaller-child
+    )
+)
+
+;! (get-smaller-child (2 19 7 25 6 33 2 15 27 3 41) 9 10)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Starting at the index, swap with the smallest child
+; if the min-heap property is violated, repeating until valid.
+(= (min-heap $list-name $index)
+    (let*
+        (
+            ($list (return-list $list-name))
+            ($left (+ 1 (* 2 $index)))
+            ($right (+ 2 (* 2 $index)))
+            ($index-item (getByIndex $list $index))
+            ($smaller-child-index (get-smaller-child $list $left $right))
+            ($smaller-child-item
+                (if (== (get-type $smaller-child-index) Number)
+                    (getByIndex $list $smaller-child-index)
+                    ()
+                )
+            )
+            ($smaller
+                (if (== (get-type $smaller-child-item) Number)
+                    (if (> $index-item $smaller-child-item)
+                        $smaller-child-index
+                        $index-item
+                    )
+                    $index
+                )
+            )
+        )
+        (
+            if (== $smaller $index)
+                $list
+                (let*
+                    (
+                        ($new-list (swap $list $index $smaller))
+                        (() (remove-atom &self (list $list-name $list)))
+                        (() (add-atom &self (list $list-name $new-list)))
+                    )
+                    (min-heap $list-name $smaller)
+                )
+        )
+    )
+)
+
+! (return-list x)
+!(min-heap x 0) ; (12 19 7 25 6 33 2 15 27 3 41) -> [(7 19 2 25 6 33 12 15 27 3 41)]
