@@ -3,8 +3,6 @@
     add-atom &self (list $list-name $x)
 ))
 
-! (append x (12 19 7 25 6 33 2 15 27 3 41))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (=(return-list $list-name)(
     match &self (list $list-name $y) $y
@@ -21,12 +19,27 @@
 ; !(length (2 19 7 25 6 33 2 15 27 3 41))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(= (getByIndex $list $n)
-    (if (== $n 0)
-        (car-atom $list)
-        (getByIndex (cdr-atom $list) (- $n 1))
+(= (get_item $exp $ind $curInd)
+    (if (== $ind $curInd)
+        (car-atom $exp)
+        (get_item (cdr-atom $exp) $ind (+ 1 $curInd))
     )
 )
+
+;; Checks if the list is non-empty and index is valid, then retrieves the item.
+(= (getByIndex $exp $ind)
+    (let*
+        (
+            ($len (length $exp))
+        )
+        (
+            if (or (== $len 0) (>= $ind $len))
+                (println! (wrong inputs))
+                (get_item $exp $ind 0)
+        )
+    )
+)
+
 
 ; ! (getByIndex (2 19 7 25 6 33 2 15 27 3 41) 10)
 
@@ -203,6 +216,7 @@
     )
 )
 
+; ! (append x (12 19 7 25 6 33 2 15 27 3 41))
 ;! (return-list x)
 ;!(min-heap x 0) ; (12 19 7 25 6 33 2 15 27 3 41) -> [(7 19 2 25 6 33 12 15 27 3 41)]
 ;! (return-list x)
@@ -227,6 +241,9 @@
 ; ! (floor-division-by-two 6)  ; 3
 ; ! (floor-division-by-two 7)  ; 3
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; starting from the last parent node calls min-heap
+; until the 0th index, this inforces min-heap laws on all items
 (= (heapify-items $list-name $index)
     (if (< $index 0)
         ()
@@ -235,7 +252,8 @@
         )
     )
 )
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; starts heapify-items starting from the last parent node
 (= (heapify $list-name)
     (let*
         (
@@ -246,6 +264,85 @@
     )
 )
 
-! (return-list x)
-!(heapify x)
-! (return-list x)
+; ! (append x (12 19 7 25 6 33 2 15 27 3 41))
+; ! (return-list x)  ; [(12 19 7 25 6 33 2 15 27 3 41)]
+; !(heapify x)
+; ! (return-list x)  ; [(2 3 7 15 6 33 12 25 27 19 41)]
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; returns the parent index of node index
+(= (parent $index) (floor-division-by-two (- $index 1)))
+
+; ! (parent 11) ; 5
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; inserts an item at the end of the list
+(= (push-item $list $item)
+    (if (== (length $list) 0)
+        ($item)
+        (let*
+            (
+                ($head (car-atom $list))
+                ($rest (cdr-atom $list))
+                ($next
+                    (if (== $rest ())
+                        ($item)
+                        (push-item $rest $item)
+                    )
+                )
+                ($new-list (cons-atom $head $next))
+            )
+            $new-list
+        )
+    )
+)
+
+; ! (push-item (1 2 3 4 5) 6) ; (1 2 3 4 5 6)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+(= (swap-up $list-name $index)
+    (if (<= $index 0)
+        ()
+        (let*
+            (
+                ($list (return-list $list-name))
+                ($parent (parent $index))
+                ($index-item (getByIndex $list $index))
+                ($parent-item (getByIndex $list $parent))
+            )
+            (
+            if (>= $index-item $parent-item)
+                ()
+                (let*
+                    (
+                        ($new-list (swap $list $parent $index))
+                        (() (remove-atom &self (list $list-name $list)))
+                        (() (add-atom &self (list $list-name $new-list)))
+                        (() (swap-up $list-name $parent))
+                    )
+                    ()
+                )
+            )
+        )
+    )
+
+)
+
+(= (heap-push $list-name $item)
+    (let*
+        (
+            ($list (return-list $list-name))
+            ($appended-list (push-item $list $item))
+            (() (remove-atom &self (list $list-name $list)))
+            (() (add-atom &self (list $list-name $appended-list)))
+            (() (swap-up $list-name (- (length $appended-list) 1)))
+        )
+        ()
+    )
+)
+
+! (append x (2 3 7 15 6 33 12 25 27 19 41)) ; already a heap for demonstration purposes
+! (heap-push x 1)
+! (return-list x) ; [(1 3 2 15 6 7 12 25 27 19 41 33)]
