@@ -246,7 +246,6 @@
     )
 )
 
-; ! (return-list x) ; [(12 19 7 25 6 33 2 15 27 3 41)]
-; !(heapify x)
-; ! (return-list x) ; [(2 3 7 15 6 33 12 25 27 19 41)]
-
+! (return-list x)
+!(heapify x)
+! (return-list x)
