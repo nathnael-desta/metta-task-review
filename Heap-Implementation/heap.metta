@@ -101,17 +101,21 @@
 ;! (combine-lists (1 2 3 4) (5 6 7 8))  [(1 2 3 4 5 6 7 8)]
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; returns the item at an index and the rest of the list
-(= (take-item-out $list $ind)
+; swaps the first index with the second index
+(= (swap $list $first $second)
     (let*
         (
-            ($before-item (slice $list $ind))
-            (($item $after-item) (get-item-and-list $list $ind 0))
-            ($rest (combine-lists $before-item $after-item))
+            ($up-to-first (slice $list $first))
+            (($first-item $after-first) (get-item-and-list $list $first))
+            ($after-first-up-to-second (slice $after-first (- (- $second $first) 1)))
+            (($second-item $after-second) (get-item-and-list $after-first (- (- $second $first) 1)))
+            ($step1 (combine-lists $up-to-first ($second-item)))
+            ($step2 (combine-lists $step1 $after-first-up-to-second))
+            ($step3 (combine-lists $step2 ($first-item)))
+            ($step4 (combine-lists $step3 $after-second))
         )
-        ($item $rest)
+        $step4
     )
 )
 
-! (take-item-out (2 19 7 25 6 33 15 27 3 41) 5)  ; [(33 (2 19 7 25 6 15 27 3 41))]
-
+! (swap (0 1 2 3 4 5 6) 2 5) ; [(0 1 5 3 4 2 6)]
