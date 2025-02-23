@@ -301,7 +301,8 @@
 ; ! (push-item (1 2 3 4 5) 6) ; (1 2 3 4 5 6)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;
+; goes to the index of the appended item
+; recursivly swaps parent and child if parent is smaller
 (= (swap-up $list-name $index)
     (if (<= $index 0)
         ()
@@ -330,6 +331,9 @@
 
 )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; pushs an item at the end of the heap
+; calls swap-up to position the item according to heap laws
 (= (heap-push $list-name $item)
     (let*
         (
@@ -343,6 +347,58 @@
     )
 )
 
+;! (append x (2 3 7 15 6 33 12 25 27 19 41)) ; already a heap for demonstration purposes
+;! (heap-push x 1)
+;! (return-list x) ; [(1 3 2 15 6 7 12 25 27 19 41 33)]
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; returns the item at the last index of a list
+(= (pop $list)
+    (let*
+        (
+            ($head (car-atom $list))
+            ($rest (cdr-atom $list))
+            ($item
+                (if (== $rest ())
+                    $head
+                    (pop $rest)
+                )
+            )
+        )
+        $item
+    )
+)
+
+;! (pop (2 3 7 15 6 33 12 25 27 19 41 10)) ; [10]
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; takes out the first item and returns it
+; pops the last item, puts it in 0th index
+; preforms min heap on the 0th index to apply heap law
+(= (heap-pop $list-name)
+    (let*
+        (
+            ($list (return-list $list-name))
+            ($head (car-atom $list))
+            ($rest (cdr-atom $list))
+            ($popped-item (pop $rest))
+            ($popped-list (slice $rest (- (length $rest) 1)))
+            ($new-list (cons-atom $popped-item $popped-list))
+            (() (remove-atom &self (list $list-name $list)))
+            (() (add-atom &self (list $list-name $new-list)))
+
+        )
+        (let*
+            (
+                ($changed-list (return-list $list-name))
+                (() (min-heap $list-name 0))
+            )
+            $head
+        )
+    )
+)
+
 ! (append x (2 3 7 15 6 33 12 25 27 19 41)) ; already a heap for demonstration purposes
-! (heap-push x 1)
-! (return-list x) ; [(1 3 2 15 6 7 12 25 27 19 41 33)]
+! (heap-pop x) ; [2]
+! (return-list x) ; [(3 6 7 15 19 33 12 25 27 41)]
