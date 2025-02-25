@@ -2,7 +2,7 @@
 (= (append $list-name $x)(
     add-atom &self (list $list-name $x)
 ))
-
+;  ! (append x (12 19 7 25 6 33 2 15 27 3 41))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (=(return-list $list-name)(
     match &self (list $list-name $y) $y
@@ -399,6 +399,6 @@
     )
 )
 
-! (append x (2 3 7 15 6 33 12 25 27 19 41)) ; already a heap for demonstration purposes
-! (heap-pop x) ; [2]
-! (return-list x) ; [(3 6 7 15 19 33 12 25 27 41)]
+; ! (append x (2 3 7 15 6 33 12 25 27 19 41)) ; already a heap for demonstration purposes
+; ! (heap-pop x) ; [2]
+; ! (return-list x) ; [(3 6 7 15 19 33 12 25 27 41)]
