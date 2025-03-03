@@ -320,7 +320,7 @@
     )
 )
 
-! (heap-push (2 3 7 15 6 33 12 25 27 19 41) 1) ; ->  [(1 3 2 15 6 7 12 25 27 19 41 33)]
+; ! (heap-push (2 3 7 15 6 33 12 25 27 19 41) 1) ; ->  [(1 3 2 15 6 7 12 25 27 19 41 33)]
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; returns the item at the last index of a list
@@ -346,29 +346,31 @@
 ; takes out the first item and returns it
 ; pops the last item, puts it in 0th index
 ; preforms min heap on the 0th index to apply heap law
-(= (heap-pop $list-name)
+(= (heap-pop $list)
     (let*
         (
-            ($list (return-list $list-name))
             ($head (car-atom $list))
             ($rest (cdr-atom $list))
             ($popped-item (pop $rest))
             ($popped-list (slice $rest (- (length $rest) 1)))
             ($new-list (cons-atom $popped-item $popped-list))
-            (() (remove-atom &self (list $list-name $list)))
-            (() (add-atom &self (list $list-name $new-list)))
 
         )
         (let*
             (
-                ($changed-list (return-list $list-name))
-                (() (min-heap $list-name 0))
+                ($heap (min-heap $new-list 0))
             )
-            $head
+            ($head $heap)
         )
     )
 )
 
-; ! (append x (2 3 7 15 6 33 12 25 27 19 41)) ; already a heap for demonstration purposes
-; ! (heap-pop x) ; [2]
-; ! (return-list x) ; [(3 6 7 15 19 33 12 25 27 41)]
+
+;! (heap-pop (2 3 7 15 6 33 12 25 27 19 41)) ; -> [(2 (3 6 7 15 19 33 12 25 27 41))]
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+; heap functions together
+! (heapify (12 19 7 25 6 33 2 15 27 3 41))  ;[(2 3 7 15 6 33 12 25 27 19 41)]
+! (heap-push (2 3 7 15 6 33 12 25 27 19 41) 1) ; ->  [(1 3 2 15 6 7 12 25 27 19 41 33)]
+! (heap-pop (2 3 7 15 6 33 12 25 27 19 41)); -> [(2 (3 6 7 15 19 33 12 25 27 41))]
