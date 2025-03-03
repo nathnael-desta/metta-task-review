@@ -1,14 +1,3 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(= (append $list-name $x)(
-    add-atom &self (list $list-name $x)
-))
-;  ! (append x (12 19 7 25 6 33 2 15 27 3 41))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(=(return-list $list-name)(
-    match &self (list $list-name $y) $y
-))
-; !(return-list x)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (= (length $list)
     (if (== $list ())
@@ -177,10 +166,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Starting at the index, swap with the smallest child
 ; if the min-heap property is violated, repeating until valid.
-(= (min-heap $list-name $index)
+(= (min-heap $list $index)
     (let*
         (
-            ($list (return-list $list-name))
             ($left (+ 1 (* 2 $index)))
             ($right (+ 2 (* 2 $index)))
             ($index-item (getByIndex $list $index))
@@ -203,23 +191,18 @@
         )
         (
             if (== $smaller $index)
-                ()
+                $list
                 (let*
                     (
                         ($new-list (swap $list $index $smaller))
-                        (() (remove-atom &self (list $list-name $list)))
-                        (() (add-atom &self (list $list-name $new-list)))
                     )
-                    (min-heap $list-name $smaller)
+                    (min-heap $new-list $smaller)
                 )
         )
     )
 )
 
-; ! (append x (12 19 7 25 6 33 2 15 27 3 41))
-;! (return-list x)
-;!(min-heap x 0) ; (12 19 7 25 6 33 2 15 27 3 41) -> [(7 19 2 25 6 33 12 15 27 3 41)]
-;! (return-list x)
+; !(min-heap (12 19 7 25 6 33 2 15 27 3 41) 0) ; [(7 19 2 25 6 33 12 15 27 3 41)]
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; implementation of floor division by 2
@@ -244,30 +227,27 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; starting from the last parent node calls min-heap
 ; until the 0th index, this inforces min-heap laws on all items
-(= (heapify-items $list-name $index)
+(= (heapify-items $list $index)
     (if (< $index 0)
-        ()
-        (let () (min-heap $list-name $index)
-            (heapify-items $list-name (- $index 1))
+        $list
+        (let $new-list (min-heap $list $index)
+            (heapify-items $new-list (- $index 1))
         )
     )
 )
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; starts heapify-items starting from the last parent node
-(= (heapify $list-name)
+(= (heapify $list)
     (let*
         (
-            ($list (return-list $list-name))
             ($list-length (length $list))
         )
-        (heapify-items $list-name (- (floor-division-by-two $list-length) 1))
+        (heapify-items $list (- (floor-division-by-two $list-length) 1))
     )
 )
 
-; ! (append x (12 19 7 25 6 33 2 15 27 3 41))
-; ! (return-list x)  ; [(12 19 7 25 6 33 2 15 27 3 41)]
-; !(heapify x)
-; ! (return-list x)  ; [(2 3 7 15 6 33 12 25 27 19 41)]
+!(heapify (12 19 7 25 6 33 2 15 27 3 41))  ;[(2 3 7 15 6 33 12 25 27 19 41)]
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; returns the parent index of node index
