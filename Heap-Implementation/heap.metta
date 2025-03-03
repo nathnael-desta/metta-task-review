@@ -246,7 +246,7 @@
     )
 )
 
-!(heapify (12 19 7 25 6 33 2 15 27 3 41))  ;[(2 3 7 15 6 33 12 25 27 19 41)]
+; !(heapify (12 19 7 25 6 33 2 15 27 3 41))  ;[(2 3 7 15 6 33 12 25 27 19 41)]
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -283,27 +283,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; goes to the index of the appended item
 ; recursivly swaps parent and child if parent is smaller
-(= (swap-up $list-name $index)
+(= (swap-up $list $index)
     (if (<= $index 0)
-        ()
+        $list
         (let*
             (
-                ($list (return-list $list-name))
                 ($parent (parent $index))
                 ($index-item (getByIndex $list $index))
                 ($parent-item (getByIndex $list $parent))
             )
             (
             if (>= $index-item $parent-item)
-                ()
+                $list
                 (let*
                     (
                         ($new-list (swap $list $parent $index))
-                        (() (remove-atom &self (list $list-name $list)))
-                        (() (add-atom &self (list $list-name $new-list)))
-                        (() (swap-up $list-name $parent))
                     )
-                    ()
+                    (swap-up $new-list $parent)
                 )
             )
         )
@@ -314,23 +310,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; pushs an item at the end of the heap
 ; calls swap-up to position the item according to heap laws
-(= (heap-push $list-name $item)
+(= (heap-push $list $item)
     (let*
         (
-            ($list (return-list $list-name))
             ($appended-list (push-item $list $item))
-            (() (remove-atom &self (list $list-name $list)))
-            (() (add-atom &self (list $list-name $appended-list)))
-            (() (swap-up $list-name (- (length $appended-list) 1)))
+            ($pushed-list (swap-up $appended-list (- (length $appended-list) 1)))
         )
-        ()
+        $pushed-list
     )
 )
 
-;! (append x (2 3 7 15 6 33 12 25 27 19 41)) ; already a heap for demonstration purposes
-;! (heap-push x 1)
-;! (return-list x) ; [(1 3 2 15 6 7 12 25 27 19 41 33)]
-
+! (heap-push (2 3 7 15 6 33 12 25 27 19 41) 1) ; ->  [(1 3 2 15 6 7 12 25 27 19 41 33)]
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; returns the item at the last index of a list
